@@ -1,0 +1,788 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>商品收藏夹</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .favorite-item:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      }
+      .favorite-item {
+          transition: all 0.3s ease;
+      }
+      /* 在此处添加新样式 */
+      .transition-all {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .opacity-0 { opacity: 0; }
+      .opacity-100 { opacity: 1; }
+      .translate-y-4 { transform: translateY(1rem); }
+
+        /* 在现有样式中添加 */
+        .origin-top-right {
+          transform-origin: top right;
+        }
+        .dropdown-container {
+          will-change: transform, opacity;
+        }
+    </style>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+    <!-- 新增返回按钮 -->
+    <div class="mb-6">
+        <a href="my.html" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+            <i class="fas fa-arrow-left mr-2"></i>
+            返回我的主页
+        </a>
+    </div>
+
+
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">我的收藏夹</h1>
+        <div class="flex space-x-4">
+            <!-- 新增分页选择器 -->
+            <div class="flex items-center space-x-2">
+                <span class="text-gray-600">每页：</span>
+                <select id="pageSize" class="px-2 py-1 border rounded-lg bg-white">
+                    <option value="4">4条</option>
+                    <option value="8">8条</option>
+                    <option value="12">12条</option>
+                    <option value="16">16条</option>
+                </select>
+            </div>
+            <!-- 修改筛选按钮容器 -->
+              <div class="relative">
+                  <button id="filterBtn" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition">
+                      <i class="fas fa-filter mr-2"></i>筛选
+                  </button>
+                  <!-- 新增分类下拉菜单 -->
+                  <!-- 修改筛选下拉菜单结构 -->
+                  <div id="filterDropdown" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-[999] origin-top-right">
+                      <div class="py-1 max-h-60 overflow-y-auto" id="categoryList">
+                          <!-- 动态分类加载提示 -->
+                          <div class="px-4 py-2 text-gray-500 text-sm">正在加载分类...</div>
+                      </div>
+                  </div>
+              </div>
+            <!-- 修改后的排序按钮容器 -->
+            <div class="relative">
+                <button id="sortBtn" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition">
+                    <i class="fas fa-sort mr-2"></i>排序
+                </button>
+                <!-- 修改下拉菜单容器 -->
+                <div id="sortDropdown" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-[999] origin-top-right">
+                    <div class="py-1">
+                        <button class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" data-sort="price_asc">价格从低到高</button>
+                        <button class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" data-sort="price_desc">价格从高到低</button>
+                        <button class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" data-sort="time_new">收藏时间从晚到早</button>
+                        <button class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" data-sort="time_old">收藏时间从早到晚</button>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+    <!-- 商品列表 -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 relative z-10"
+    >
+      <!-- 商品卡片1 -->
+      <div
+        class="favorite-item bg-white rounded-xl shadow-md overflow-hidden"
+      >
+        <div class="relative">
+          <img
+            src="https://aidev.gemcoder.com/staticResource/echoAiSystemImages/7bebe81d46cdcc3e9776ae11ab14386d.png"
+            alt="游戏笔记本"
+            class="w-full h-48 object-cover"
+          />
+          <button
+            class="absolute top-2 right-2 bg-white rounded-full p-2 text-red-500 hover:text-red-600 transition"
+          >
+            <i class="fas fa-heart"> </i>
+          </button>
+        </div>
+        <div class="p-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-1">
+            超极游戏笔记本
+          </h3>
+          <p class="text-gray-500 text-sm mb-2">
+            高性能处理器 | 16GB内存 | 1TB SSD
+          </p>
+          <div class="flex justify-between items-center">
+            <span class="text-red-500 font-bold text-lg"> ¥8,999 </span>
+            <button
+              class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg transition"
+            >
+              <i class="fas fa-shopping-cart mr-1"> </i>
+              加入购物车
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- 商品卡片2 -->
+      <div
+        class="favorite-item bg-white rounded-xl shadow-md overflow-hidden"
+      >
+        <div class="relative">
+          <img
+            src="https://aidev.gemcoder.com/staticResource/echoAiSystemImages/8453266b8a98a2a4c79f6bbb55461840.png"
+            alt="无线耳机"
+            class="w-full h-48 object-cover"
+          />
+          <button
+            class="absolute top-2 right-2 bg-white rounded-full p-2 text-red-500 hover:text-red-600 transition"
+          >
+            <i class="fas fa-heart"> </i>
+          </button>
+        </div>
+        <div class="p-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-1">
+            降噪无线耳机
+          </h3>
+          <p class="text-gray-500 text-sm mb-2">
+            主动降噪 | 30小时续航 | 蓝牙5.0
+          </p>
+          <div class="flex justify-between items-center">
+            <span class="text-red-500 font-bold text-lg"> ¥1,299 </span>
+            <button
+              class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg transition"
+            >
+              <i class="fas fa-shopping-cart mr-1"> </i>
+              加入购物车
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- 商品卡片3 -->
+      <div
+        class="favorite-item bg-white rounded-xl shadow-md overflow-hidden"
+      >
+        <div class="relative">
+          <img
+            src="https://aidev.gemcoder.com/staticResource/echoAiSystemImages/5457d7cc6bfb5793bbe1262a11ec2247.png"
+            alt="智能手表"
+            class="w-full h-48 object-cover"
+          />
+          <button
+            class="absolute top-2 right-2 bg-white rounded-full p-2 text-red-500 hover:text-red-600 transition"
+          >
+            <i class="fas fa-heart"> </i>
+          </button>
+        </div>
+        <div class="p-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-1">
+            智能健康手表
+          </h3>
+          <p class="text-gray-500 text-sm mb-2">
+            心率监测 | 血氧检测 | 7天续航
+          </p>
+          <div class="flex justify-between items-center">
+            <span class="text-red-500 font-bold text-lg"> ¥899 </span>
+            <button
+              class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg transition"
+            >
+              <i class="fas fa-shopping-cart mr-1"> </i>
+              加入购物车
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- 商品卡片4 -->
+      <div
+        class="favorite-item bg-white rounded-xl shadow-md overflow-hidden"
+      >
+        <div class="relative">
+          <img
+            src="https://aidev.gemcoder.com/staticResource/echoAiSystemImages/6e0c6d0324d07dcdbfc9584568afd1e0.png"
+            alt="单反相机"
+            class="w-full h-48 object-cover"
+          />
+          <button
+            class="absolute top-2 right-2 bg-white rounded-full p-2 text-red-500 hover:text-red-600 transition"
+          >
+            <i class="fas fa-heart"> </i>
+          </button>
+        </div>
+        <div class="p-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-1">
+            专业单反相机
+          </h3>
+          <p class="text-gray-500 text-sm mb-2">全画幅 | 4K视频 | 双卡槽</p>
+          <div class="flex justify-between items-center">
+            <span class="text-red-500 font-bold text-lg"> ¥12,999 </span>
+            <button
+              class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg transition"
+            >
+              <i class="fas fa-shopping-cart mr-1"> </i>
+              加入购物车
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 分页控制 -->
+    <div class="flex justify-center mt-10">
+      <nav class="flex items-center space-x-2">
+        <button
+          class="px-3 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-100"
+        >
+          <i class="fas fa-chevron-left"> </i>
+        </button>
+        <button class="px-3 py-1 rounded bg-blue-500 text-white">1</button>
+        <button
+          class="px-3 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-100"
+        >
+          2
+        </button>
+        <button
+          class="px-3 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-100"
+        >
+          3
+        </button>
+        <button
+          class="px-3 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-100"
+        >
+          <i class="fas fa-chevron-right"> </i>
+        </button>
+      </nav>
+    </div>
+    </div>
+    <script>
+        // 新增全局提示函数
+        // 在原有showToast函数基础上添加动画效果
+        function showToast(message) {
+            const toast = document.createElement('div');
+            // 修改背景色为蓝色并保持居中
+            toast.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg transition-all opacity-0 translate-y-4 text-center';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // 添加入场动画
+            setTimeout(() => {
+                toast.classList.add('opacity-100');
+                toast.classList.remove('translate-y-4');
+            }, 50);
+        
+            // 自动消失动画
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+        
+        
+        // 绑定收藏按钮事件（新增函数，用于动态生成卡片后重新绑定）
+        function bindFavoriteButtons() {
+            // 修改点：改为监听按钮点击而不是图标点击
+            document.querySelectorAll('button .fa-heart').forEach(function (heartIcon) {
+                heartIcon.addEventListener('click', function (e) {
+                    const button = e.currentTarget.closest('button');
+                    const parentItem = this.closest('.favorite-item');
+                    const productId = parentItem.getAttribute('data-product-id');
+                    const userId = parseInt(localStorage.getItem('userId')) || 1;
+                    const jwtToken = localStorage.getItem('jwtToken');
+
+                    if (!jwtToken) {
+                        alert('请先登录');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+
+                    // 移除嵌套的重复条件判断，统一处理取消收藏逻辑
+                    if (button.classList.contains('text-red-500')) {
+                        // 立即记录被移除的卡片信息（用于失败恢复）
+                        const tempItem = parentItem.cloneNode(true);
+                        const tempProductId = productId;
+
+                        // 立即移除卡片（用户立即看到反馈）
+                        parentItem.remove();
+
+                        // 更新无商品提示
+                        const remainingItems = document.querySelectorAll('.favorite-item').length;
+                        if (remainingItems === 0) {
+                            document.querySelector('.grid').innerHTML = 
+                                `<div class="col-span-4 text-center py-8 text-gray-500">暂无收藏商品</div>`;
+                        }
+
+                        // 发送取消收藏请求（仅保留优化后的版本）
+                        fetch(`http://localhost:9527/collections/deleteByUserId?productId=${productId}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${jwtToken}` },
+                            mode: 'cors'
+                        })
+                        .then(response => {
+                            if (!response.ok) throw new Error(`接口请求失败，状态码：${response.status}`);
+                            return response.json();
+                        })
+                        .then(data => {
+                            // 关键修复：匹配后端返回的字符串类型 code（"200"）
+                            if (data.code === "200") {
+                                // 修复点：正确处理缓存数据结构
+                                const cachedData = JSON.parse(sessionStorage.getItem('cachedFavorites')) || { data: [] };
+                                const updatedCache = {
+                                    ...cachedData,
+                                    data: cachedData.data.filter(item => item.productId != productId) // 从缓存对象中获取实际数据数组
+                                };
+                                sessionStorage.setItem('cachedFavorites', JSON.stringify(updatedCache));
+                                
+                                console.log('取消收藏成功');
+                                // 先执行分页刷新逻辑
+                                const currentPageSize = Number(document.getElementById('pageSize').value); // 获取当前显示数
+                                const currentPage = parseInt(document.querySelector('nav .bg-blue-500').textContent);
+                                const totalItems = document.querySelectorAll('.favorite-item').length;
+                                
+                                const shouldPage = totalItems <= 0 ? Math.max(1, currentPage - 1) : currentPage;
+                                
+                                setTimeout(() => {
+                                    loadFavoriteItems(shouldPage, currentPageSize, Date.now());
+                                    document.querySelectorAll('nav button').forEach(btn => {
+                                        btn.classList.toggle('bg-blue-500', parseInt(btn.textContent) === shouldPage);
+                                    });
+                                    // 将alert移到DOM更新之后
+                                    showToast("取消收藏成功");  // 代替alert
+                                }, 300); // 缩短延迟时间
+                            }
+                        })
+                        .catch(error => {
+                            console.error('取消收藏失败:', error);
+                            alert(`操作提示：${error.message}，已恢复商品`);
+
+                            // 失败时恢复卡片（仅当接口明确失败时执行）
+                            const gridContainer = document.querySelector('.grid');
+                            gridContainer.insertBefore(tempItem, gridContainer.firstChild);
+                            bindFavoriteButtons(); // 重新绑定事件
+
+                            // 恢复按钮状态
+                            const restoredButton = tempItem.querySelector('button .fa-heart').closest('button');
+                            restoredButton.classList.remove('text-gray-400');
+                            restoredButton.classList.add('text-red-500');
+                        });
+
+                        // 立即更新按钮状态（移除非优化的重复代码）
+                        button.classList.remove('text-red-500');
+                        button.classList.add('text-gray-400');
+                    } else {
+                        // 收藏逻辑
+                        button.classList.remove('text-gray-400');
+                        button.classList.add('text-red-500');
+
+                        const productName = parentItem.querySelector('h3').textContent;
+                        const productImg = parentItem.querySelector('img').src;
+
+                        fetch('http://localhost:9527/collections/addProductToCollection', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${jwtToken}`
+                            },
+                            body: JSON.stringify({
+                                userId: userId,
+                                productId: parseInt(productId),
+                                productName: productName,
+                                productImg: productImg,
+                                favoriteTime: new Date().toISOString().replace('Z', '') // 可选：传递收藏时间（后端可能自动生成）
+                            }),
+                            mode: 'cors' // 显式设置CORS模式
+                        })
+                        .then(response => {
+                            if (!response.ok) throw new Error('收藏失败');
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                console.log('收藏成功');
+                            } else {
+                                throw new Error(data.message || '收藏失败');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('收藏失败:', error);
+                            alert(`收藏失败：${error.message}`);
+                            // 修正点：使用button变量恢复按钮状态
+                            button.classList.remove('text-red-500');
+                            button.classList.add('text-gray-400'); // 恢复按钮的灰色状态
+                        });
+                    }
+                });
+            });
+        }
+
+                // 修改筛选按钮点击事件
+                document.getElementById('filterBtn').addEventListener('click', function() {
+                    const dropdown = document.getElementById('filterDropdown');
+                    const sortDropdown = document.getElementById('sortDropdown');
+                    sortDropdown.classList.add('hidden'); // 新增：关闭排序菜单
+                    dropdown.classList.toggle('hidden');
+                });
+
+                // 筛选功能实现
+                // 修改后的筛选功能（使用category_id）
+                document.getElementById('filterDropdown').addEventListener('click', function(e) {
+                    if (e.target.tagName === 'BUTTON') {
+
+                      const activePageBtn = document.querySelector('nav button.bg-blue-500');
+                      if (activePageBtn && activePageBtn.textContent !== '1') {
+                          activePageBtn.classList.remove('bg-blue-500', 'text-white');
+                          document.querySelector('nav button:not([class*="fa-"]):first-child').classList.add('bg-blue-500', 'text-white');
+                      }
+                        // 移除其他按钮的激活状态
+                        document.querySelectorAll('#filterDropdown button').forEach(btn => {
+                            btn.classList.remove('bg-blue-500', 'text-white');
+                        });
+                        
+                        // 设置当前选中状态
+                        e.target.classList.add('bg-blue-500', 'text-white');
+                        
+                        // 新增：获取分类ID并重新加载数据
+                        const categoryId = e.target.dataset.filter;
+                        console.log('当前选择分类:', categoryId); // 调试日志
+                        
+                        loadFavoriteItems(
+                            1, // 重置到第一页
+                            Number(document.getElementById('pageSize').value),
+                            null,
+                            null,
+                            categoryId === 'all' ? 'all' : parseInt(categoryId) // 确保数值类型
+                        );
+                    }
+                });
+
+                        // 修改排序按钮点击事件
+                        document.getElementById('sortBtn').addEventListener('click', function() {
+                            const dropdown = document.getElementById('sortDropdown');
+                            const filterDropdown = document.getElementById('filterDropdown');
+                            filterDropdown.classList.add('hidden'); // 新增：关闭筛选菜单
+                            dropdown.classList.toggle('hidden');
+                        });
+
+        // 新增：排序选项点击事件处理
+        document.getElementById('sortDropdown').addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON') {
+                const sortType = e.target.dataset.sort;
+                let sortBy, order;
+                
+                // 解析排序类型
+                switch (sortType) {
+                    case 'price_asc':
+                        sortBy = 'price';
+                        order = 'asc';
+                        break;
+                    case 'price_desc':
+                        sortBy = 'price';
+                        order = 'desc';
+                        break;
+                    case 'time_new':
+                        sortBy = 'favoriteTime';
+                        order = 'desc'; // 时间新到旧用降序
+                        break;
+                    case 'time_old':
+                        sortBy = 'favoriteTime';
+                        order = 'asc'; // 时间旧到新用升序
+                        break;
+                }
+
+                // 新增：获取当前分类参数
+        const currentCategory = document.querySelector('#filterDropdown .bg-blue-500')?.dataset.filter || 'all';
+
+                 // 直接使用当前数据重新排序（不重新请求）
+                  loadFavoriteItems(
+                      parseInt(document.querySelector('nav button.bg-blue-500')?.textContent || 1),
+                      Number(document.getElementById('pageSize').value),
+                      sortBy, 
+                      order,
+                      currentCategory  // 添加分类参数
+                  );
+                  this.classList.add('hidden');
+                      }
+                  });
+        
+
+        // 新增全局变量存储总页数
+        let totalPages = 1;
+
+        // 通用收藏数据加载函数（修复结构错误）
+        // 修改loadFavoriteItems函数中的fetch请求部分
+        function loadFavoriteItems(page = 1, pageSize = Number(document.getElementById('pageSize').value),sortBy, order,category = 'all', timestamp = Date.now()) {
+            // 新增调试：输出当前加载的页码
+            console.log('当前加载页:', page); 
+            // 新增缓存检查
+            const cachedData = JSON.parse(sessionStorage.getItem('cachedFavorites')) || [];
+            if (cachedData.length > 0 && Date.now() - cachedData.timestamp < 5000) {
+                // 使用缓存数据渲染
+                renderFromCache(cachedData);
+                return;
+            }
+
+            const jwtToken = localStorage.getItem('jwtToken');
+            // 修复点：确保用户ID正确获取（数值类型）
+            const userId = parseInt(localStorage.getItem('userId')) || 1;
+        
+            let url = `http://localhost:9527/collections/getByPageFind?page=${page}&pageSize=${Number(pageSize)}&t=${timestamp}`;
+
+            // 未登录处理
+            if (!jwtToken) {
+                alert('请先登录查看收藏');
+                window.location.href = 'login.html';
+                return;
+            }
+
+             // 将分类参数处理移到未登录检查之后
+                if (category && category !== 'all') {
+                    if (typeof category !== 'number') {
+                        category = parseInt(category);
+                        if (isNaN(category)) {
+                            console.error('无效分类ID:', category);
+                            return;
+                        }
+                    }
+                    url += `&categoryId=${category}`;
+                }
+
+            // 调用用户分页指定接口（修改URL）
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${jwtToken}`
+                },
+                mode: 'cors'
+            })
+            // 关键修正1：完整的响应解析和错误检查
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP错误，状态码：${response.status}`);
+                return response.json(); // 必须显式解析JSON
+            })
+            .then(data => {
+                // 关键修改：根据后端返回的 total 计算总页数
+                const total = data.data?.total || 0;
+                totalPages = Math.ceil(total / pageSize);
+
+                const goodsContainer = document.querySelector('.grid');
+                goodsContainer.innerHTML = '';
+
+                let list = data.data?.data ?? [];
+              
+                // 修复点1：添加调试日志
+                console.log('数据加载结果:', { total, listLength: list.length, totalPages });
+
+                if (total === 0) {
+                    goodsContainer.innerHTML = `<div class="col-span-4 text-center py-8 text-gray-500">暂无收藏商品</div>`;
+                    return; // 确保提前返回
+                }
+                
+                if (total > 0 && !list?.length) {
+                    goodsContainer.innerHTML = `<div class="col-span-4 text-center py-8 text-gray-500">第${page}页暂无收藏商品，请尝试其他页码</div>`;
+                }
+
+                // 新增前端排序逻辑
+                if(sortBy && order) {
+                    list.sort((a, b) => {
+                        const valueA = sortBy === 'favoriteTime' ? new Date(a[sortBy]) : a[sortBy];
+                        const valueB = sortBy === 'favoriteTime' ? new Date(b[sortBy]) : b[sortBy];
+                        
+                        if (order === 'asc') {
+                            return valueA > valueB ? 1 : -1;
+                        } else {
+                            return valueA < valueB ? 1 : -1;
+                        }
+                    });
+                }
+
+                // 将分页生成逻辑移到商品列表生成之前
+                const pagination = document.querySelector('nav');
+                let buttonsHtml = `
+                    <button class="px-3 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>`;
+                
+                for (let i = 1; i <= totalPages; i++) {
+                    buttonsHtml += `
+                        <button class="px-3 py-1 rounded ${i === page ? 'bg-blue-500 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-100'}">
+                            ${i}
+                        </button>`;
+                }
+                
+                buttonsHtml += `
+                    <button class="px-3 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>`;
+                
+                pagination.innerHTML = buttonsHtml;
+                bindPagination(); // 新增分页绑定
+                
+                // 修复点3：修正商品生成逻辑
+                if (list.length > 0) {
+                    list.forEach(item => {
+                        const cardHtml = `
+                            <div class="favorite-item bg-white rounded-xl shadow-md overflow-hidden" data-product-id="${item.productId}">
+                                <div class="relative">
+                                    <img src="${item.productImg}" alt="${item.productName}" class="w-full h-48 object-cover"/>
+                                    <button class="absolute top-2 right-2 bg-white rounded-full p-2 text-red-500 hover:text-red-600 transition">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-1">${item.productName}</h3>
+                                    <p class="text-gray-500 text-sm mb-2">收藏时间：${new Date(item.favoriteTime).toLocaleString()}</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-red-500 font-bold text-lg">¥${item.price || '--'}</span>
+                                        <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg transition">
+                                            <i class="fas fa-shopping-cart mr-1"></i>加入购物车
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>`;
+                        goodsContainer.insertAdjacentHTML('beforeend', cardHtml);
+                    });
+                } else if (total > 0) {
+                    goodsContainer.innerHTML = `<div class="col-span-4 text-center py-8 text-gray-500">第${page}页暂无收藏商品，请尝试其他页码</div>`;
+                }
+
+                bindFavoriteButtons();
+
+                sessionStorage.setItem('cachedFavorites', JSON.stringify({
+                data: data.data?.data || [],  // 存储实际商品数组
+                total: data.data?.total || 0, // 存储总数
+                timestamp: Date.now()
+                }));
+            })
+            .catch(error => {
+                console.error('数据加载失败:', { 
+                    error, 
+                    currentCategory: document.querySelector('#filterDropdown .bg-blue-500')?.dataset.filter 
+                });
+                document.querySelector('.grid').innerHTML = 
+                    `<div class="col-span-4 text-center py-8 text-red-500">加载失败：${error.message}</div>`;
+            });
+        }
+
+
+        // 新增分类加载函数
+          function loadCategories() {
+              fetch('http://localhost:9527/collections/getProductCategory', {
+                  headers: { 'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` }
+              })
+              .then(response => {
+                  if (!response.ok) throw new Error('请求失败'); // 新增错误检查
+                  return response.json();
+              })
+              .then(data => {
+                  const container = document.getElementById('categoryList');
+                  // 添加空数据检查
+                  if (!data.data || data.data.length === 0) {
+                      container.innerHTML = `<div class="px-4 py-2 text-gray-500 text-sm">暂无分类数据</div>`;
+                      return;
+                  }
+                  
+                  container.innerHTML = `
+                      <button class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 bg-blue-500 text-white" data-filter="all">
+                          全部类别
+                      </button>
+                  `;
+                  
+                  // 动态生成分类按钮
+                    data.data.forEach(category => {
+                        const button = document.createElement('button');
+                        button.className = 'w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100';
+                        button.dataset.filter = category.categoryId;  // 修改为 categoryId
+                        button.textContent = category.categoryName;  // 修改为 categoryName
+                        container.appendChild(button);
+                    });
+                  
+                  // 添加默认选中状态（在此处添加）
+                  document.querySelector('#categoryList button[data-filter="all"]').classList.add('bg-blue-500', 'text-white');
+                
+              })
+              .catch(error => {
+                  console.error('分类加载失败:', error);
+                  document.getElementById('categoryList').innerHTML = `
+                      <div class="px-4 py-2 text-red-500 text-sm">加载失败：${error.message}</div>
+                  `;
+              });
+          }
+
+        // 确保分页按钮绑定正确
+        // 新增分页绑定函数
+        function bindPagination() {
+            document.querySelectorAll('nav button').forEach(button => {
+                button.addEventListener('click', function() {
+                    // 先获取当前激活页再清除状态
+                    const activeBtn = document.querySelector('nav button.bg-blue-500:not([class*="fa-"])');
+                    const currentActivePage = activeBtn ? parseInt(activeBtn.textContent) : 1;
+
+                    // 然后清除所有按钮激活状态
+                    const allPageButtons = document.querySelectorAll('nav button');
+                    allPageButtons.forEach(btn => {
+                        btn.classList.remove('bg-blue-500', 'text-white');
+                        btn.classList.add('border', 'text-gray-700');
+                    });
+        
+                    
+        
+                    // 计算目标页码
+                    let targetPage = currentActivePage;
+                    if (this.querySelector('.fa-chevron-left')) {
+                        targetPage = Math.max(1, currentActivePage - 1);
+                    } else if (this.querySelector('.fa-chevron-right')) {
+                        targetPage = Math.min(totalPages, currentActivePage + 1);
+                    } else {
+                        targetPage = parseInt(this.textContent);
+                    }
+                    // 新增调试日志
+                    console.log('当前激活页:', currentActivePage, '总页数:', totalPages);
+                    // 激活目标按钮
+                    const targetBtn = [...document.querySelectorAll('nav button')].find(btn => 
+                        !btn.querySelector('i') && parseInt(btn.textContent) === targetPage
+                    );
+                    if (targetBtn) {
+                        targetBtn.classList.add('bg-blue-500', 'text-white');
+                        targetBtn.classList.remove('border', 'text-gray-700');
+                    }
+        
+                    // 修改点：获取当前选中分类
+                    const currentCategory = document.querySelector('#filterDropdown button.bg-blue-500')?.dataset.filter || 'all';
+                    
+                    loadFavoriteItems(
+                        targetPage,
+                        Number(document.getElementById('pageSize').value),
+                        null,
+                        null,
+                        currentCategory // 添加分类参数
+                    );
+                    console.log('当前pageSize:', pageSize, '类型:', typeof pageSize);
+                });
+            });
+        }
+
+        // 页面加载时自动加载第一页数据（新增）
+        // 在DOMContentLoaded事件中添加分页选择器的change事件监听
+        window.addEventListener('DOMContentLoaded', () => {
+            loadCategories();
+            document.querySelector('.grid').innerHTML = ''; 
+            const initialPageSize = Number(document.getElementById('pageSize').value);
+            loadFavoriteItems(1, initialPageSize);
+        
+            // 新增：绑定分页选择器的change事件
+            document.getElementById('pageSize').addEventListener('change', function() {
+                const newPageSize = Number(this.value);
+                // 修改错误的函数调用
+                loadFavoriteItems(
+                    1,  // 重置到第一页
+                    newPageSize,
+                    null,
+                    null,
+                    document.querySelector('#filterDropdown .bg-blue-500')?.dataset.filter || 'all'
+                );
+            });
+        });
+
+    </script>
+</html>
